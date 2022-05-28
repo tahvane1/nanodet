@@ -107,6 +107,7 @@ class ShuffleNetV2(nn.Module):
         model_size="1.5x",
         out_stages=(2, 3, 4),
         with_last_conv=False,
+        channels=3,
         kernal_size=3,
         activation="ReLU",
         pretrain=True,
@@ -123,6 +124,7 @@ class ShuffleNetV2(nn.Module):
         self.with_last_conv = with_last_conv
         self.kernal_size = kernal_size
         self.activation = activation
+        self.channels = channels
         if model_size == "0.5x":
             self._stage_out_channels = [24, 48, 96, 192, 1024]
         elif model_size == "1.0x":
@@ -135,7 +137,7 @@ class ShuffleNetV2(nn.Module):
             raise NotImplementedError
 
         # building first layer
-        input_channels = 3
+        input_channels = self.channels
         output_channels = self._stage_out_channels[0]
         self.conv1 = nn.Sequential(
             nn.Conv2d(input_channels, output_channels, 3, 2, 1, bias=False),
