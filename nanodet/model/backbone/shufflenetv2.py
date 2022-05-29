@@ -206,6 +206,6 @@ class ShuffleNetV2(nn.Module):
             if url is not None:
                 pretrained_state_dict = model_zoo.load_url(url)
                 if self.channels == 1:
-                    pretrained_state_dict.update([('first_conv.0.weight',  torch.rand(self._stage_out_channels[1], self.channels, 3, 3))])
+                    pretrained_state_dict.update([('conv1.0.weight',  torch.rand(self._stage_out_channels[0], self.channels, 3, 3))])
                 print("=> loading pretrained model {}".format(url))
                 self.load_state_dict(pretrained_state_dict, strict=False)

@@ -46,8 +46,12 @@ def normalize(meta, mean, std):
 
 
 def _normalize(img, mean, std):
-    mean = np.array(mean, dtype=np.float32).reshape(1, 1, 3) / 255
-    std = np.array(std, dtype=np.float32).reshape(1, 1, 3) / 255
+    if len(img.shape) == 2:
+        mean = np.array(mean, dtype=np.float32) / 255
+        std = np.array(std, dtype=np.float32) / 255
+    else:
+        mean = np.array(mean, dtype=np.float32).reshape(1, 1, 3) / 255
+        std = np.array(std, dtype=np.float32).reshape(1, 1, 3) / 255
     img = (img - mean) / std
     return img
 
