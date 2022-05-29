@@ -31,7 +31,7 @@ def generate_ouput_names(head_cfg):
     return cls_names + dis_names
 
 
-def main(config, model_path, output_path, input_shape=(320, 320)):
+def main(config, model_path, output_path, input_shape=(320, 320),channels=3):
     logger = Logger(-1, config.save_dir, False)
     model = build_model(config.model)
     checkpoint = torch.load(model_path, map_location=lambda storage, loc: storage)
@@ -44,7 +44,7 @@ def main(config, model_path, output_path, input_shape=(320, 320)):
 
         model = repvgg_det_model_convert(model, deploy_model)
     dummy_input = torch.autograd.Variable(
-        torch.randn(1, 3, input_shape[0], input_shape[1])
+        torch.randn(1, channels, input_shape[0], input_shape[1])
     )
 
     torch.onnx.export(
@@ -101,5 +101,5 @@ if __name__ == "__main__":
         assert len(input_shape) == 2
     if model_path is None:
         model_path = os.path.join(cfg.save_dir, "model_best/model_best.ckpt")
-    main(cfg, model_path, out_path, input_shape)
+    main(cfg, model_path, out_path, input_shape,cfg.data.train.channels)
     print("Model saved to:", out_path)
